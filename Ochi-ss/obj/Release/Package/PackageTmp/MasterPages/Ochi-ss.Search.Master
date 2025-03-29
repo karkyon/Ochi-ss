@@ -1,0 +1,350 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Ochi-ss.Search.Master.cs" Inherits="Ochi_ss.Ochi_ss_Search" %>
+
+<!DOCTYPE html>
+
+<html>
+<head runat="server">
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>越智製作所Webオーダーシステム</title>
+
+    <asp:ContentPlaceHolder ID="head" runat="server"></asp:ContentPlaceHolder>
+
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap" />
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.3/css/bootstrap.min.css' media="screen" />
+    <script type="text/javascript" src='https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.3.min.js'></script>
+    <script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.3/js/bootstrap.min.js'></script>
+
+    <style>
+        * {
+            font-family: "メイリオ", Meiryo, sans-serif;
+            font-size: 12px;
+        }
+
+        body {
+            height: 100%;
+            margin: 0px;
+            padding: 0px;
+            color: #333333;
+        }
+
+        table {
+            border-spacing: 0;
+            display: table;
+            /* border-collapse: collapse; レイアウトをシンプルに保ちたい場合、collapse */
+            border-collapse: separate;
+            box-sizing: border-box;
+            text-indent: initial;
+            unicode-bidi: isolate;
+            border-spacing: 1px;
+            border-color: gray;
+            /* margin: 0 auto;         テーブルを中央揃え */
+            table-layout: fixed;
+        }
+
+        tbody {
+            display: table-row-group;
+            vertical-align: middle;
+            unicode-bidi: isolate;
+            border-color: inherit;
+        }
+        
+        tr {
+            display: table-row;
+            vertical-align: middle; /* 垂直方向の中央揃え */
+            unicode-bidi: isolate;
+            border-color: inherit;
+        }
+
+        th, td {
+            border: 1px solid #c0cbdb; /* 薄い罫線 */
+            display: table-cell;
+            vertical-align: middle; /* 垂直方向の中央揃え */
+            unicode-bidi: isolate;
+        }
+
+        td > * {
+            vertical-align: middle; /* 子要素を中央揃え */
+            display: block; /* 各要素を個別に配置 */
+        }
+
+        /* (入力エリア)列幅を個別に設定 */
+        .col-estimate-no { width: 100px; } /* 1列目（見積No）の幅 */
+        .col-estimate-date { width: 100px; } /* 2列目（見積日付）の幅 */
+        .col-order-no {width: 150px; } /* 3列目（お客様注文No）の幅 */
+        .col-deliver-dest { width: 200px; } /* 4列目（出荷先）の幅 */
+        .col-deliver-addr { width: 400px; } /* 5列目（出荷先住所）の幅 */
+        .col-estimate-sum { width: 120px; } /* 6列目（見積合計額）の幅 */
+        .col-estimate-count { width: 100px; } /* 7列目（明細件数）の幅 */
+        .col-estimate-status { width: 200px; } /* 8列目（状況）の幅 */
+        .col-edit-btn { width: 70px; } /* 8列目（編集Button）の幅 */
+        
+        /* (登録済み明細エリア)編集・削除AタグをButton風に変更 */
+        .button-style {
+            width: 70px;
+            display: inline-block;
+            padding: 4px 4px;
+            font-size: 12px;
+            color: white;
+            background-color: #007bff; /* ボタンの背景色 */
+            border: 1px;
+            border-radius: 4px;
+            text-align: center;
+            text-decoration: none; /* 下線を削除 */
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        /* 金額フィールド用右寄せ */
+        .number-cell {
+            text-align: right; /* 数値を右寄せ */
+            padding: 2px 4px; /* セル内の余白 */
+            font-family: Arial, sans-serif; /* 読みやすいフォント */
+            font-size: 18px; /* 適切なフォントサイズ */
+            white-space: nowrap; /* 数値が改行されないようにする */
+        }
+        .total-cell {
+            text-align: right; /* 右寄せ */
+            font-size: large; /* フォントサイズをLargeに */
+            background-color: #e6f7ff; /* 背景色を薄い青 */
+            color: #003366; /* 文字色を濃い紺色 */
+            border: 1px solid #cce7ff; /* 境界線の色 */
+            border-radius: 4px; /* 角を少し丸める */
+            padding: 5px; /* 内側の余白 */
+            width: 100%; /* 必要に応じて幅を調整 */
+            box-sizing: border-box; /* パディングを含めて幅を計算 */
+        }
+
+        .total-cell[readonly] {
+            background-color: #e6f7ff; /* readonlyでも背景色を薄い青に */
+            cursor: not-allowed; /* マウスカーソルを変更 */
+        }
+
+        .button-style:hover {
+            background-color: #f0f0f0; /* ホバー時の背景色 (薄いグレー) */
+            color: #007bff; /* ホバー時の文字色 */
+            border: 1px solid #007bff; /* ホバー時に枠線を追加 */
+            text-decoration: none; /* 下線を削除 */
+        }
+
+        .button-style:active {
+            background-color: #d6d6d6; /* クリック時の背景色 (少し濃いグレー) */
+            color: #0056b3; /* クリック時の文字色 */
+            text-decoration: none; /* 下線を削除 */
+        }
+
+        .single.tlbl {
+            border: solid 1px #c0cbdb;
+            background-color: #e1e9f1;
+            color: initial;
+            min-width: 20px;
+            vertical-align: middle; /* 垂直方向の中央揃え */
+            padding: 1px 2px 1px 2px;
+        }
+        
+        .multi.tlbl {
+            border: solid 1px #c0cbdb;
+            background-color: #e1e9f1;
+            color: initial;
+            min-width: 20px;
+            vertical-align: middle; /* 垂直方向の中央揃え */
+            padding: 1px 2px 1px 2px;
+        }
+
+        .middle {
+            display: flex;
+            flex-direction: column; /* 子要素を縦に並べる */
+            justify-content: center; /* 縦方向に中央揃え */
+            align-items: center; /* 水平方向に中央揃え */
+            text-align: center;
+        }
+
+        .inline-block {
+            display: inline-block;
+            vertical-align: middle; /* 垂直方向の位置も調整 */
+        }
+
+        .logo {
+            max-width: 300px; /* ロゴ画像の最大幅を指定 */
+            height: auto;
+            margin-bottom: 30px; /* ログインフォームとの間隔 */
+        }
+        
+        /* 検索条件のテーブルスタイル */
+        .SearchConditionArea {
+            display: flex; /* フレックスボックスを有効化 */
+            border: none; /* 枠線をなくす */
+            max-width: 1200px; /* 最大幅を指定 */
+            margin: 4; /* 中央揃え */
+            padding: 4; /* テーブル全体の余白 */
+            font-size: 18px; /* フォントサイズ */
+            text-align: center; /* テキストを中央揃え */
+            border-collapse: collapse; /* テーブルの余白を消す */
+        }
+
+        /* テーブル全体の枠線を消す */
+        .SearchConditionArea td {
+            border: none; /* 枠線を完全に消す */
+        }
+
+        /* 全体のテーブルスタイル */
+        .TopButtonArea {
+            display: flex; /* フレックスボックスを有効化 */
+            flex-direction: column; /* 子要素を縦に並べる */
+            border: none; /* 枠線をなくす */
+            max-width: 1200px; /* 最大幅を指定 */
+            margin: 0 auto; /* 中央揃え */
+            padding: 0; /* テーブル全体の余白をなくす */
+            font-size: 25px; /* フォントサイズ */
+            font-weight: bold; /* 太字 */
+            text-align: center; /* テキストを中央揃え */
+            border-collapse: collapse; /* テーブルの余白を消す */
+        }
+
+        /* タイトル部分のスタイル */
+        .TopButtonArea tr:first-child td {
+            text-align: center; /* 中央揃え */
+            font-size: 22px; /* タイトルの文字サイズ */
+            font-weight: bold; /* 太字 */
+            padding: 5px 0; /* 上下の余白を減らす */
+            line-height: 1.2; /* 行間を縮める */
+        }
+
+        /* ボタン部分のスタイル */
+        .TopButtonArea tr:last-child td {
+            display: inline-block; /* ボタンを横並びに */
+            text-align: center; /* テキストを中央揃え */
+            padding: 0; /* セル内の余白をなくす */
+            margin: 0; /* セル自体の余白をなくす */
+            border: none; /* 枠線をなくす */
+        }
+
+        /* ボタンのスタイル */
+        .TopButtonArea .btn {
+            display: inline-block; /* ボタンを横並びにする */
+            width: 180px; /* ボタンの幅を統一 */
+            padding: 6px 8px; /* 上下と左右の余白を小さく */
+            font-size: 14px; /* ボタンのフォントサイズ */
+            text-align: center; /* テキストを中央揃え */
+            line-height: 1; /* ボタン内の高さを抑える */
+            border-radius: 4px; /* ボタンの角丸 */
+            margin: 0 5px; /* ボタン間の左右余白を追加 */
+        }
+
+        /* テーブル全体の枠線を消す */
+        .TopButtonArea td {
+            border: none; /* 枠線を完全に消す */
+        }
+
+        .btn {
+            width: 100%; /* ボタンをセル内で幅いっぱいに */
+        }
+
+        form {
+            width: 100%; /* 必要に応じて幅を調整 */
+            max-width: 1000px; /* フォーム全体の幅を揃える */
+        }
+
+        .form-control {
+            margin: 0 auto; /* 入力フィールドを中央揃え */
+            text-align: left; /* プレースホルダーとテキストの整列 */
+        }
+
+        .btn-primary {
+            margin-top: 10px; /* ボタンと入力欄の間隔 */
+            display: block;
+            width: 100%; /* 必要に応じて全幅を指定 */
+        }
+    </style>
+
+    <script type="text/javascript"><!-- }
+        //ENTERｷｰでカーソルの移動実行
+        var targetElm = "input[type=text],input[type=password],input[type=submit],input[type=button],input[type=checkbox],input[type=textarea],select,a,button";
+        $targetElm = $(targetElm);
+        $(function () {
+            var elements = "input[type=text],input[type=password],input[type=select],input[type=checkbox],input[type=button],select";
+            $(elements).keypress(function (e) {
+                var c = e.which ? e.which : e.keyCode;
+                if (c == 13) {
+                    var tabindex = $(this).attr("tabindex");
+                    // alert($(this).attr("tabindex"));
+                    if (typeof (tabindex) != "undefined" && $("[tabindex='" + (tabindex - 0 + 1) + "']").size() > 0) {
+                        $("[tabindex='" + (tabindex - 0 + 1) + "']").focus();
+                    } else {
+                        var index = $targetElm.index(this);
+                        $targetElm.eq(index + 1).focus();
+                    }
+                    e.preventDefault();
+                }
+            });
+        });
+
+        //テキストボックスにフォーカスが当たった時に実行
+        $(document).ready(function () {
+            $("input[type='text']").focus(function () {
+                //全選択にする
+                $(this).select();
+            });
+        });
+
+        document.addEventListener("DOMContentLoaded", function () {
+            // 全ての行を取得
+            const rows = document.querySelectorAll("tr");
+
+            rows.forEach((row, index) => {
+                row.addEventListener("mouseenter", function () {
+                    // 背景色を変更する対象を計算
+                    highlightRow(row, index, rows, true);
+                });
+
+                row.addEventListener("mouseleave", function () {
+                    // 背景色を元に戻す対象を計算
+                    highlightRow(row, index, rows, false);
+                });
+            });
+
+            // `rowspan`対応の背景色変更関数
+            function highlightRow(currentRow, currentIndex, allRows, isHighlight) {
+                const backgroundColor = isHighlight ? "#d5e6ff" : ""; // ホバー時 or 元に戻す時の色
+                const cells = currentRow.children;
+
+                for (let cell of cells) {
+                    // rowspanが存在するセルの場合
+                    const rowspan = parseInt(cell.getAttribute("rowspan") || "1", 10);
+
+                    if (rowspan > 1) {
+                        // rowspan分だけ次の行の背景色も変更
+                        for (let i = 0; i < rowspan; i++) {
+                            if (allRows[currentIndex + i]) {
+                                allRows[currentIndex + i].style.backgroundColor = backgroundColor;
+                            }
+                        }
+                    }
+                }
+
+                // 現在の行の背景色も変更
+                currentRow.style.backgroundColor = backgroundColor;
+            }
+        });
+
+        function SetDestCd(val)
+        {
+            document.form.DistCompCd.value = val;
+        }
+    </script>
+
+</head>
+<body>
+    <div class="middle">
+        <div class="logo">
+            <div class="clearfix"></div>
+            <asp:Image ID="LogoImg" runat="server" ImageUrl="~/Images/Grayscale_logo_m.png"></asp:Image>
+            <asp:Image ID="Image1" runat="server" ImageUrl="~/Images/titleR_logo.png"></asp:Image>
+            <asp:Label ID="lblSessionID" runat="server"></asp:Label>
+        </div>
+        <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server"></asp:ContentPlaceHolder>
+    </div>
+</body>
+</html>

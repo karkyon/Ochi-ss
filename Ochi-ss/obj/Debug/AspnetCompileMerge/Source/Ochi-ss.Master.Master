@@ -1,0 +1,43 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Ochi-ss.Master.Master.cs" Inherits="Ochi_ss.Master" %>
+
+<!DOCTYPE html>
+
+<html>
+<head runat="server">
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>越智製作所Webオーダーシステム</title>
+
+    <asp:ContentPlaceHolder ID="head" runat="server"></asp:ContentPlaceHolder>
+
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap" />
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" />
+    <script type="text/javascript" src='https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.3.min.js'></script>
+    <script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.3/js/bootstrap.min.js'></script>
+    <link rel="stylesheet" href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.3/css/bootstrap.min.css' media="screen" />
+
+    
+    <style type="text/css">
+        body
+        {
+            margin: 20pt !important;
+        }
+    </style>
+    
+</head>
+<body>
+    
+    <div class="middle">
+        <div class="logo">
+            <div class="clearfix"></div>
+            <asp:Image ID="LogoImg" runat="server" ImageUrl="~/Images/Grayscale_logo_m.png"></asp:Image>
+            <asp:Image ID="Image1" runat="server" ImageUrl="~/Images/titleR_logo.png"></asp:Image>
+            <!--<h6><asp:LoginName ID="LoginName1" runat="server" Font-Bold="true" /></h6>-->
+        </div>
+    </div>
+      
+    <div>
+        <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server"></asp:ContentPlaceHolder>
+    </div>
+</body>
+</html>

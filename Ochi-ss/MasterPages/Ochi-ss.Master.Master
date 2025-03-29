@@ -1,0 +1,70 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Ochi-ss.Master.Master.cs" Inherits="Ochi_ss.Master" %>
+
+<!DOCTYPE html>
+
+<html>
+<head runat="server">
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>越智製作所Webオーダーシステム</title>
+
+    <asp:ContentPlaceHolder ID="head" runat="server"></asp:ContentPlaceHolder>
+
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap" />
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.3/css/bootstrap.min.css' media="screen" />
+    <script type="text/javascript" src='https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.3.min.js'></script>
+    <script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.3/js/bootstrap.min.js'></script>
+
+    <style type="text/css">
+        body
+        {
+            margin: 20pt !important;
+        }
+
+        .middle {
+            display: flex;
+            flex-direction: column; /* 子要素を縦に並べる */
+            justify-content: center; /* 縦方向に中央揃え */
+            align-items: center; /* 水平方向に中央揃え */
+            height: 80vh; /* 画面全体を高さに設定 */
+            text-align: center;
+        }
+
+        .logo img {
+            max-width: 300px; /* ロゴ画像の最大幅を指定 */
+            height: auto;
+            margin-bottom: 120px; /* ログインフォームとの間隔 */
+        }
+
+        form {
+            width: 100%; /* 必要に応じて幅を調整 */
+            max-width: 400px; /* フォーム全体の幅を揃える */
+        }
+
+        .form-control {
+            margin: 0 auto; /* 入力フィールドを中央揃え */
+            text-align: left; /* プレースホルダーとテキストの整列 */
+        }
+
+        .btn-primary {
+            margin-top: 30px; /* ボタンと入力欄の間隔 */
+            display: block;
+            width: 100%; /* 必要に応じて全幅を指定 */
+        }
+    </style>
+
+    
+</head>
+<body>
+    <div class="middle">
+        <!-- ロゴ部分 -->
+        <div class="logo">
+            <asp:Image ID="LogoImg" runat="server" ImageUrl="~/Images/Grayscale_logo_m.png"></asp:Image>
+            <asp:Image ID="Image1" runat="server" ImageUrl="~/Images/titleR_logo.png"></asp:Image>
+        </div>
+        <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server"></asp:ContentPlaceHolder>
+    </div>
+</body>
+</html>

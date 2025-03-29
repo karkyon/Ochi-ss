@@ -1,0 +1,119 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Ochi-ss.master.cs" Inherits="Ochi_ss.Ochi_ss" %>
+
+<!DOCTYPE html>
+
+<html>
+<head runat="server">
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>越智製作所Webオーダーシステム</title>
+
+    <asp:ContentPlaceHolder ID="head" runat="server"></asp:ContentPlaceHolder>
+
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap" />
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.3/css/bootstrap.min.css' media="screen" />
+    <script type="text/javascript" src='https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.3.min.js'></script>
+    <script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.3/js/bootstrap.min.js'></script>
+    
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f5f5f5; /* 背景を薄いグレーに */
+        }
+
+        /* ログインフォームの枠 */
+        .login-container {
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px; /* 角を丸める */
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* 軽い影をつける */
+            width: 350px; /* 適度な幅 */
+            text-align: center;
+        }
+
+        /* ロゴのスタイル */
+        .logo {
+            display: flex;
+            flex-direction: column; /* 縦に並べる */
+            align-items: center; /* 水平方向の中央寄せ */
+            justify-content: center; /* 垂直方向の中央寄せ（必要なら） */
+            gap: 15px; /* ロゴ間の間隔を開ける */
+            margin-bottom: 30px; /* ログインフォームとの間隔 */
+        }
+
+        .logo img {
+            max-width: 300px; /* ロゴの最大幅を適度に設定 */
+            height: auto;
+        }
+
+        /* 入力欄のデザイン */
+        .form-control {
+            border-radius: 5px; /* 角丸 */
+            padding: 10px;
+            font-size: 14px;
+        }
+
+        /* ログインボタン */
+        .btn-primary {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        /* チェックボックスの調整 */
+        .checkbox {
+            text-align: left;
+            font-size: 14px;
+        }
+
+        /* エラーメッセージのデザイン */
+        .alert-danger {
+            margin-top: 15px;
+        }
+
+    </style>
+
+    <script type="text/javascript">
+        function clickFire() {
+            var destCd = $(this).closest('tr').children("td")[0].children("span").innerText();
+            alert('1 :' + destCd);
+            var destName = $(this).closest('tr').children("td")[1].find('span').innerText;
+            alert('2 :' + destName);
+            var destAddr = $(this).closest('tr').children("td")[2].innerText;
+            alert('3 :' + destAddr);
+            var destSection = $(this).closest('tr').children("td")[3].innerText;
+            alert('4 :' + destSection);
+            var destCharge = $(this).closest('tr').children("td")[5].innerText;
+            alert('5 :' + destCharge);
+            var destTel = $(this).closest('tr').children("td")[5].innerText;
+            alert('6 :' + destTel);
+            var destFax = $(this).closest('tr').children("td")[6].innerText;
+            alert('7 :' + destFax);
+
+            // 見積画面に選択行の直送先情報呼び出し
+            window.opener.document.getElementById("destCd").value
+                = document.getElementById("destCd").value
+
+            // Window閉じる
+            window.close();
+        }
+    </script>
+
+</head>
+<body>
+    <div class="middle">
+        <!-- ロゴ部分 -->
+        <div class="logo">
+            <asp:Image ID="LogoImg" runat="server" ImageUrl="~/Images/Grayscale_logo_m.png"></asp:Image>
+            <asp:Image ID="Image1" runat="server" ImageUrl="~/Images/titleR_logo.png"></asp:Image>
+        </div>
+        <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server"></asp:ContentPlaceHolder>
+    </div>
+</body>
+</html>

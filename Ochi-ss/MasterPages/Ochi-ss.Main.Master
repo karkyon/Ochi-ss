@@ -1,0 +1,162 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Ochi-ss.Main.Master.cs" Inherits="Ochi_ss.Ochi_ss_Main" %>
+
+<!DOCTYPE html>
+
+<html>
+<head runat="server">
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>越智製作所Webオーダーシステム</title>
+
+    <asp:ContentPlaceHolder ID="head" runat="server"></asp:ContentPlaceHolder>
+
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap" />
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.3/css/bootstrap.min.css' media="screen" />
+    <script type="text/javascript" src='https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.3.min.js'></script>
+    <script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.3/js/bootstrap.min.js'></script>
+    
+    <style>
+        /* === 画面全体のレイアウト === */
+        body, html {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f5f5f5;
+        }
+
+        /* === メインコンテンツエリア === */
+        .menu-container {
+            width: 90%;
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* 中央揃え */
+            width: 600px; /* ロゴの幅と統一 */
+            margin: 0 auto; /* 中央寄せ */
+            padding: 20px;
+            background-color: #f8f9fa; /* 背景を薄いグレーに */
+            border-radius: 10px; /* 角丸 */
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* 軽い影をつける */
+        }
+
+        /* === ユーザー情報エリア === */
+        #CustomerInfo {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: #555;
+        }
+
+        /* === メニューを縦に並べる === */
+        .manu {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px; /* ボタン間の間隔を確保 */
+        }
+
+        /* === ボタンのデザイン === */
+        .menu-container .btn {
+            width: 100%; /* 親要素の幅いっぱいにする */
+            max-width: 300px; /* 最大幅を設定 */
+            padding: 12px; /* 余白を調整 */
+            font-size: 16px; /* フォントサイズを適切に */
+            margin-bottom: 10px; /* ボタン間の間隔 */
+        }
+        
+        /* === メッセージコンテンツエリア === */
+        .message-container {
+            width: 100%;
+            max-width: 600px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 30px; /* ここで間隔を追加 */
+        }
+
+        /* グリッド全体のデザイン */
+        .message-container .table {
+            border: none; /* 外枠を消す */
+            background-color: #ffffff;
+        }
+
+        /* ヘッダーのデザイン */
+        .message-container .table th {
+            background-color: #f0f0f0; /* ヘッダーを淡いグレーに */
+            border: none;
+            font-weight: bold;
+            text-align: left;
+            padding: 10px;
+        }
+
+        /* 各行のデザイン（背景色を交互に） */
+        .message-container .table tr:nth-child(odd) {
+            background-color: #ffffff; /* 奇数行は白 */
+        }
+
+        .message-container .table tr:nth-child(even) {
+            background-color: #f9f9f9; /* 偶数行は淡いグレー */
+        }
+
+        /* 各セルのデザイン（下線のみ表示） */
+        .message-container .table td {
+            border: none;
+            padding: 5px;
+            text-align: left;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.2); /* 薄い下線 */
+        }
+
+        /* === 掲示板エリア === */
+        #BulletinBoardSection {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+            margin-top: 30px;
+            text-align: left;
+        }
+
+        #BulletinBoardSection h4 {
+            text-align: center;
+        }
+
+        /* === 入力欄のデザイン === */
+        .input-small, .form-control {
+            width: 100%;
+            border-radius: 5px;
+            padding: 8px;
+        }
+
+        /* === ログアウトボタン === */
+        .exit {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .exit .btn {
+            width: 100%;
+            max-width: 300px;
+            font-size: 16px;
+            padding: 10px;
+        }
+    </style>
+
+    <script type="text/javascript">
+    </script>
+
+</head>
+<body>
+    <div class="middle">
+        <!-- ロゴ部分 -->
+        <div class="logo">
+            <asp:Image ID="LogoImg" runat="server" ImageUrl="~/Images/Grayscale_logo_m.png"></asp:Image>
+            <asp:Image ID="Image1" runat="server" ImageUrl="~/Images/titleR_logo.png"></asp:Image>
+        </div>
+        <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server"></asp:ContentPlaceHolder>
+    </div>
+</body>
+</html>

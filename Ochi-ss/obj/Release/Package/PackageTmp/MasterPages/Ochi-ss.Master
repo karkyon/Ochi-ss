@@ -1,0 +1,157 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Ochi-ss.master.cs" Inherits="Ochi_ss.Ochi_ss" %>
+
+<!DOCTYPE html>
+
+<html>
+<head runat="server">
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>越智製作所Webオーダーシステム</title>
+
+    <asp:ContentPlaceHolder ID="head" runat="server"></asp:ContentPlaceHolder>
+
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap" />
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.3/css/bootstrap.min.css' media="screen" />
+    <script type="text/javascript" src='https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.3.min.js'></script>
+    <script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.3/js/bootstrap.min.js'></script>
+    
+    <style>
+            /* 入力エリア全般のスタイル */
+        .input-small {
+            font-size: 12px; /* 小さいフォントサイズ */
+            width: 250px; /* 幅を調整 */
+            padding: 5px; /* 内側の余白を少なく */
+            margin-bottom: 8px; /* 各入力エリア間の間隔を縮小 */
+            border: 1px solid #ccc; /* 枠線を薄いグレーに */
+            border-radius: 4px; /* 角を少し丸める */
+            display: block; /* 各要素を縦並びに */
+        }
+
+        /* 投稿ボタンを小さく */
+        .btn-sm {
+            font-size: 12px; /* ボタンのフォントサイズを小さく */
+            padding: 5px 10px; /* ボタン内の余白を少なく */
+        }
+
+        /* 名前とメッセージ入力欄間の間隔を縮小 */
+        #BulletinBoardSection {
+            line-height: 1.2; /* 入力欄全体の行間を狭める */
+        }
+
+        /* GridViewの全体スタイル */
+        .custom-grid {
+            font-size: 12px; /* フォントサイズを小さく */
+            line-height: 1.2; /* 行間を詰める */
+            border-collapse: collapse; /* 枠線をまとめて表示 */
+            width: 100%; /* 横幅を調整 */
+        }
+
+        /* ヘッダー部分のスタイル */
+        .custom-grid th {
+            background-color: #f9f9f9; /* ヘッダーの背景色を淡い色に */
+            border: 1px solid #ddd; /* 枠線の色 */
+            padding: 8px; /* 余白を少し追加 */
+            text-align: left; /* ヘッダーのテキストを左寄せ */
+        }
+
+        /* 各行のスタイル */
+        .custom-grid td {
+            border: 1px solid #ddd; /* 淡い枠線 */
+            padding: 6px; /* 少しだけ余白を追加 */
+            vertical-align: middle; /* テキストの垂直位置を中央に */
+        }
+
+        /* 行のホバー時の効果 */
+        .custom-grid tr:hover {
+            background-color: #f2f2f2; /* ホバー時の背景色を淡いグレーに */
+        }
+
+        /* 偶数行の背景色 */
+        .custom-grid tr:nth-child(even) {
+            background-color: #fafafa; /* 偶数行の背景色をやや薄い色に */
+        }
+
+        .middle {
+            display: flex;
+            flex-direction: column; /* 子要素を縦に並べる */
+            justify-content: center; /* 縦方向に中央揃え */
+            align-items: center; /* 水平方向に中央揃え */
+            text-align: center;
+        }
+
+        .logo img {
+            max-width: 300px; /* ロゴ画像の最大幅を指定 */
+            height: auto;
+            margin-bottom: 50px; /* ログインフォームとの間隔 */
+        }
+
+        form {
+            width: 100%; /* 必要に応じて幅を調整 */
+            max-width: 400px; /* フォーム全体の幅を揃える */
+        }
+
+        .form-control {
+            margin: 0 auto; /* 入力フィールドを中央揃え */
+            text-align: left; /* プレースホルダーとテキストの整列 */
+        }
+
+        .btn-primary {
+            margin-top: 30px; /* ボタンと入力欄の間隔 */
+            display: block;
+            width: 100%; /* 必要に応じて全幅を指定 */
+        }
+
+        .exit {
+            display: flex; /* フレックスボックスを有効化 */
+            justify-content: center; /* 水平方向に中央揃え */
+            align-items: center; /* 垂直方向に中央揃え */
+            margin: 0; /* 外側の余白をなくす */
+        }
+        .btn-secondary {
+            margin-top: 50px; /* ボタンと入力欄の間隔 */
+            display: block;
+            align-items: center; /* 水平方向に中央揃え */
+            width: 60%; /* 必要に応じて全幅を指定 */
+        }
+    </style>
+
+    <script type="text/javascript">
+        function clickFire() {
+            var destCd = $(this).closest('tr').children("td")[0].children("span").innerText();
+            alert('1 :' + destCd);
+            var destName = $(this).closest('tr').children("td")[1].find('span').innerText;
+            alert('2 :' + destName);
+            var destAddr = $(this).closest('tr').children("td")[2].innerText;
+            alert('3 :' + destAddr);
+            var destSection = $(this).closest('tr').children("td")[3].innerText;
+            alert('4 :' + destSection);
+            var destCharge = $(this).closest('tr').children("td")[5].innerText;
+            alert('5 :' + destCharge);
+            var destTel = $(this).closest('tr').children("td")[5].innerText;
+            alert('6 :' + destTel);
+            var destFax = $(this).closest('tr').children("td")[6].innerText;
+            alert('7 :' + destFax);
+
+            // 見積画面に選択行の直送先情報呼び出し
+            window.opener.document.getElementById("destCd").value
+                = document.getElementById("destCd").value
+
+            // Window閉じる
+            window.close();
+        }
+    </script>
+
+</head>
+<body>
+    <div class="middle">
+        <!-- ロゴ部分 -->
+        <div class="logo">
+            <asp:Image ID="LogoImg" runat="server" ImageUrl="~/Images/Grayscale_logo_m.png"></asp:Image>
+            <asp:Image ID="Image1" runat="server" ImageUrl="~/Images/titleR_logo.png"></asp:Image>
+        </div>
+        <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server"></asp:ContentPlaceHolder>
+    </div>
+</body>
+</html>

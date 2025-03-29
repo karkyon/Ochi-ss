@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<parameters>
+  <parameter name="IIS Web Application Name" description="" value="Default Web Site" tags="IisApp">
+    <parameterEntry kind="ProviderPath" scope="IisApp" match="^W:\\01_顧客\\越智製作所\\Webシステム\\Ochi-ss\\Ochi-ss\\obj\\Release\\Package\\PackageTmp$" />
+    <parameterEntry kind="ProviderPath" scope="setAcl" match="^W:\\01_顧客\\越智製作所\\Webシステム\\Ochi-ss\\Ochi-ss\\obj\\Release\\Package\\PackageTmp$" />
+  </parameter>
+  <parameter name="constr-Web.config Connection String" description="constr データベースに接続するためにアプリケーションによって web.config で使用される接続文字列。" value="Data Source=10.1.103.164; Initial Catalog=ochi_edi;Connect Timeout=60;Persist Security Info=True; User ID = sa; Password = Ochi101594" tags="SqlConnectionString">
+    <parameterEntry kind="XmlFile" scope="W:\\01_顧客\\越智製作所\\Webシステム\\Ochi-ss\\Ochi-ss\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='constr']/@connectionString" />
+  </parameter>
+</parameters>

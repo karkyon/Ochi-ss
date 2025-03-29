@@ -1,0 +1,386 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Ochi-ss.3DImage.Master.cs" Inherits="Ochi_ss.Ochi_ss_3DImage" %>
+
+<!DOCTYPE html>
+<html>
+<head runat="server">
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>越智製作所Webオーダーシステム</title>
+
+    <!-- CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap" />
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.3/css/bootstrap.min.css" media="screen" />
+
+    <!-- JavaScript Libraries -->
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.3.min.js" type="text/javascript"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.3/js/bootstrap.min.js" type="text/javascript"></script>
+    <script async src="https://unpkg.com/es-module-shims@1.5.8/dist/es-module-shims.js"></script>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.167.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.167.0/examples/jsm/"
+        }
+      }
+    </script>
+
+    <!-- カスタムスタイル -->
+    <style>
+        .middle {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .logo img {
+            max-width: 300px;
+            height: auto;
+            margin-bottom: 40px;
+        }
+
+        #canvas-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto;
+            width: 800px;
+            height: 600px;
+            border: 1px solid #ccc;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        #dimension-table {
+            width: 800px; /* Canvas コンテナの幅に合わせる */
+            margin: 10px auto; /* 中央揃え */
+            border-collapse: collapse; /* 枠線を重ならないように調整 */
+        }
+
+        #dimension-table th,
+        #dimension-table td {
+            border: 1px solid #ccc; /* 枠線 */
+            text-align: center; /* テキストを中央揃え */
+            padding: 10px; /* セル内の余白 */
+            font-size: 1rem; /* フォントサイズ */
+        }
+
+        .controls {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .definition {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            margin-top: 20px;
+            font-size: 1.2rem;
+            line-height: 1.6;
+        }
+
+        .definition p {
+            margin-bottom: 4px;
+        }
+
+        .definition .color-box-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .color-box {
+            display: inline-block;
+            width: 60px;
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+            margin: 0 5px;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        .color-thickness {
+            background-color: rgba(255, 0, 0, 0.8);
+        }
+
+        .color-length {
+            background-color: rgba(0, 255, 0, 0.8);
+        }
+
+        .color-width {
+            background-color: rgba(0, 0, 255, 0.8);
+        }
+    </style>
+    
+    <script type="module">
+        import * as THREE from "three";
+        import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+
+        // 初期化フラグ、グローバル変数
+        let initialized = false;
+        let scene, camera, renderer, controls;
+        let cube = null, edges = null;
+        let labels = []; // ← ここでグローバル変数として定義する (修正)
+        let dimensionLabels = []; // 寸法スプライトを管理する配列
+
+        document.addEventListener("DOMContentLoaded", () => {
+            if (initialized) return; // 初期化済みならスキップ
+            initialized = true;
+
+            // テキストボックスから値を取得する関数
+            function getDimensionValue(id) {
+                return parseFloat(document.getElementById(id).value) || 0;
+            }
+
+            // 初期値を取得してCubeを描画
+            function initializeCube() {
+                const t = getDimensionValue("dimT");
+                const a = getDimensionValue("dimA");
+                const b = getDimensionValue("dimB");
+
+                if (t > 0 && a > 0 && b > 0) {
+                    createCube(t, a, b);
+                }
+            }
+
+            // 各入力フィールドにイベントリスナーを追加
+            ["dimT", "dimA", "dimB"].forEach(id => {
+                document.getElementById(id).addEventListener("input", initializeCube);
+            });
+
+            // 対象となるコントロールのセレクタ
+            const focusableElementsSelector = "input, select, textarea, button, a";
+
+            // 全フォーカス可能なコントロールを取得
+            const focusableElements = Array.from(document.querySelectorAll(focusableElementsSelector));
+
+            // ------------------------------------
+            // Enter キーでフォーカス移動
+            // ------------------------------------
+            focusableElements.forEach((element, index) => {
+                element.addEventListener("keypress", function (event) {
+                    if (event.key === "Enter") {
+                        event.preventDefault(); // デフォルトの Enter キー動作を防止
+
+                        let nextIndex = index + 1;
+
+                        // 次のフォーカス対象を探す（循環処理）
+                        while (nextIndex < focusableElements.length && focusableElements[nextIndex].disabled) {
+                            nextIndex++;
+                        }
+
+                        if (nextIndex < focusableElements.length) {
+                            focusableElements[nextIndex].focus();
+                        }
+                    }
+                });
+
+                element.addEventListener("input", () => {
+                    const t = parseFloat(document.getElementById("dimT").value);
+                    const a = parseFloat(document.getElementById("dimA").value);
+                    const b = parseFloat(document.getElementById("dimB").value);
+
+                    if (t > 0 && a > 0 && b > 0) {
+                        createCube(t, a, b);
+                    }
+                });
+
+                element.addEventListener("keypress", (event) => {
+                    if (!/[\d.]/.test(event.key) && event.key !== "Backspace" && event.key !== "Delete") {
+                        event.preventDefault();
+                    }
+                });
+            });
+
+            const container = document.getElementById("canvas-container");
+
+            // 既存の canvas を削除
+            while (container.firstChild) {
+                container.removeChild(container.firstChild);
+            }
+
+            // シーンの初期化
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0xf0f0f0);
+
+            // カメラの初期化 (初期距離を調整)
+            camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+            camera.position.set(10, 10, 10);
+
+            // レンダラーの初期化
+            renderer = new THREE.WebGLRenderer();
+            renderer.setSize(container.clientWidth, container.clientHeight);
+            container.appendChild(renderer.domElement);
+
+            // コントロールの初期化
+            controls = new OrbitControls(camera, renderer.domElement);
+            controls.target.set(0, 0, 0);
+            controls.update();
+
+            // ライトの追加
+            const light = new THREE.DirectionalLight(0xffffff, 1);
+            light.position.set(1, 2, 3);
+
+            scene.add(light);
+            scene.add(new THREE.AmbientLight(0xffffff, 0.5));
+
+            // アニメーションループの開始
+            animate();
+
+            // 初回描画
+            initializeCube();
+
+            // ウィンドウサイズ変更時の処理
+            window.addEventListener("resize", () => {
+                const width = container.clientWidth;
+                const height = container.clientHeight;
+                renderer.setSize(width, height);
+                camera.aspect = width / height;
+                camera.updateProjectionMatrix();
+            });
+
+            // ボタンのクリックイベント処理
+            window.updateCube = function updateCube() {
+                const width = parseFloat(document.getElementById("width").value);
+                const height = parseFloat(document.getElementById("height").value);
+                const depth = parseFloat(document.getElementById("depth").value);
+
+                createCube(width, height, depth);
+            };
+        });
+
+        // 立方体を作成する関数
+        function createCube(t, a, b) {  // t = 厚み, a = 長さ, b = 巾
+
+            // 既存の立方体とエッジを削除
+            if (cube) scene.remove(cube);
+            if (edges) scene.remove(edges);
+
+            // 寸法スプライトを削除
+            // 既存の寸法ラベルを削除
+            labels.forEach(label => scene.remove(label));
+            labels = [];  // クリア
+
+            // 立方体を作成する関数
+            // 画面の 70% をカバーするサイズ設定
+            const maxCanvasSize = Math.min(window.innerWidth, window.innerHeight) * 0.85;
+            const maxSize = maxCanvasSize / 100;  // 調整用の基準
+            const scaleFactor = maxSize / Math.max(t, a, b);
+
+            // 正しい寸法順でボックスを作成
+            const geometry = new THREE.BoxGeometry(t * scaleFactor, a * scaleFactor, b * scaleFactor);
+
+            // 面の色を設定
+            const materials = [
+                new THREE.MeshStandardMaterial({ color: new THREE.Color(1, 0, 0), transparent: true, opacity: 0.6 }), // 赤 (厚み)
+                new THREE.MeshStandardMaterial({ color: new THREE.Color(1, 0, 0), transparent: true, opacity: 0.6 }),
+                new THREE.MeshStandardMaterial({ color: new THREE.Color(0, 1, 0), transparent: true, opacity: 0.6 }), // 緑 (長さ)
+                new THREE.MeshStandardMaterial({ color: new THREE.Color(0, 1, 0), transparent: true, opacity: 0.6 }),
+                new THREE.MeshStandardMaterial({ color: new THREE.Color(0, 0, 1), transparent: true, opacity: 0.6 }), // 青 (巾)
+                new THREE.MeshStandardMaterial({ color: new THREE.Color(0, 0, 1), transparent: true, opacity: 0.6 })
+            ];
+
+            cube = new THREE.Mesh(geometry, materials);
+            scene.add(cube);
+
+            // ラベルの表示位置を調整 (少し面から離す)
+            addLabel(`厚み: ${t} mm`, new THREE.Vector3(0, t * scaleFactor / 2, 0), new THREE.Vector3(0, 1, 0)); // Y軸方向
+            addLabel(`長さ: ${a} mm`, new THREE.Vector3(0, 0, a * scaleFactor / 2), new THREE.Vector3(0, 0, 1)); // Z軸方向
+            addLabel(`巾: ${b} mm`, new THREE.Vector3(b * scaleFactor / 2, 0, 0), new THREE.Vector3(1, 0, 0)); // X軸方向
+
+            // エッジの作成
+            const edgeGeometry = new THREE.EdgesGeometry(geometry);
+            const edgeMaterial = new THREE.LineBasicMaterial({ color: 0x000000 });
+            edges = new THREE.LineSegments(edgeGeometry, edgeMaterial);
+            scene.add(edges);
+
+        }
+
+        // テキストラベル用のテクスチャ作成
+        function createTextTexture(text) {
+            const canvas = document.createElement("canvas");
+            const ctx = canvas.getContext("2d");
+            canvas.width = 256;
+            canvas.height = 64;
+
+            ctx.fillStyle = "white";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = "black";
+            ctx.font = "24px Arial";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillText(text, canvas.width / 2, canvas.height / 2);
+
+            const texture = new THREE.CanvasTexture(canvas);
+            return texture;
+        }
+
+        // ラベルを追加する関数
+        function addLabel(text, position, offsetDirection) {
+            const material = new THREE.SpriteMaterial({
+                map: createTextTexture(text),
+                depthTest: false, // 他のオブジェクトによって隠されないようにする
+            });
+
+            const sprite = new THREE.Sprite(material);
+            sprite.scale.set(2, 1, 1); // ラベルのサイズを適切に調整
+
+            // Cube から適切な距離だけ離す（Cube のサイズによって変化）
+            const offset = Math.max(5, Math.abs(position.length()) * 0.1); // Cube が大きくなるほどオフセットを増やす
+            sprite.position.copy(position).add(offsetDirection.multiplyScalar(offset));
+
+            // ラベルを最前面に描画
+            sprite.renderOrder = 999;
+            sprite.material.depthTest = false;
+            sprite.material.depthWrite = false;
+
+            scene.add(sprite);
+            labels.push(sprite);
+        }
+
+
+        // アニメーションループ
+        function animate() {
+            requestAnimationFrame(animate);
+            controls.update();
+            renderer.render(scene, camera);
+        }
+    </script>
+    <!-- 子ページ用の追加ヘッダー -->
+    <asp:ContentPlaceHolder ID="head" runat="server"></asp:ContentPlaceHolder>
+
+</head>
+<body>
+    <div class="middle">
+        <!-- ロゴ部分 -->
+        <div class="logo">
+            <asp:Image ID="LogoImg" runat="server" ImageUrl="~/Images/Grayscale_logo_m.png" />
+            <asp:Image ID="Image1" runat="server" ImageUrl="~/Images/titleR_logo.png" />
+        </div>
+
+        <!-- コンテンツ部分 -->
+        <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server"></asp:ContentPlaceHolder>
+    </div>
+    
+    <!-- 寸法の定義と色の説明 -->
+    <div class="definition">
+        <p><strong>寸法の定義:</strong></p>
+        <p>
+            厚み面 (T): 金属プレートの最も短い寸法であり、全体の厚さを示す辺に直交する面です。<br />
+            長さ面 (A): 金属プレートの最も長い寸法であり、厚み面および幅面に直交します。<br />
+            巾面 (B): 金属プレートの2番目に短い寸法（幅）を含む面であり、厚み面に直交します。
+        </p>
+        <div class="color-box-container">
+            <div class="color-box color-thickness">厚み (T)</div>
+            <div class="color-box color-length">長さ (A)</div>
+            <div class="color-box color-width">巾 (B)</div>
+        </div>
+    </div>
+</body>
+</html>

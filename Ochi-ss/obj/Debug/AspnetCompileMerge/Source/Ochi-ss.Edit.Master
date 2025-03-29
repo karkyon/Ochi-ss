@@ -1,0 +1,140 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Ochi-ss.Edit.master.cs" Inherits="Ochi_ss.Ochi_ss_Edit" %>
+
+<!DOCTYPE html>
+
+<html>
+<head runat="server">
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>越智製作所Webオーダーシステム</title>
+
+    <asp:ContentPlaceHolder ID="head" runat="server"></asp:ContentPlaceHolder>
+
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap" />
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.3/css/bootstrap.min.css' media="screen" />
+    <script type="text/javascript" src='https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.3.min.js'></script>
+    <script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.3/js/bootstrap.min.js'></script>
+    
+    <script type="text/javascript"><!--
+
+    //ENTERｷｰでカーソルの移動実行
+    var targetElm = "input[type=text],input[type=password],input[type=submit],input[type=button],input[type=checkbox],input[type=textarea],select,a,button";
+    $targetElm = $(targetElm);
+    $(function () {
+        var elements = "input[type=text],input[type=password],input[type=select],input[type=checkbox],input[type=button],select";
+        $(elements).keypress(function (e) {
+            var c = e.which ? e.which : e.keyCode;
+            if (c == 13) {
+                var tabindex = $(this).attr("tabindex");
+                // alert($(this).attr("tabindex"));
+                if (typeof (tabindex) != "undefined" && $("[tabindex='" + (tabindex - 0 + 1) + "']").size() > 0) {
+                    $("[tabindex='" + (tabindex - 0 + 1) + "']").focus();
+                } else {
+                    var index = $targetElm.index(this);
+                    $targetElm.eq(index + 1).focus();
+                }
+                e.preventDefault();
+            }
+        });
+    });
+
+    //クリックしたらその行にあるチェックボックスがチェックされる
+    $(document).ready(function () {
+        $('tr').click(function (event) {
+            // チェックボックスがチェックされたら無視
+            if ((event.target.type == 'checkbox')) {
+                $(':checkbox', this).trigger('click');
+            }
+        });
+    });
+
+     function OrderConfirm() {
+
+        var flag = false; // 選択されているか否かを判定する変数
+
+        for (var i = 0; i < document.form1.fruits.length; i++) {
+
+            // i番目のチェックボックスがチェックされているかを判定
+            if (document.form1.fruits[i].checked) {
+                flag = true;
+                alert(document.form1.fruits[i].value + "が選択されました。");
+            }
+        }
+
+        // 何も選択されていない場合の処理   
+        if (!flag) {
+            alert("項目が選択されていません。");
+        }
+    }
+
+    function SetDestCd(val)
+    {
+        document.form.DistCompCd.value = val;
+    }
+    </script>
+
+    <style type="text/css">
+        body
+        {
+            margin: 20pt !important;
+        }
+        
+        table {
+            border-collapse:collapse;   /* 隣接するセルの罫線を重ねて表示 */
+            font-family: "メイリオ";    /* フォントのスタイルを指定 */
+            color: #808080;             /* フォントの色を指定 */
+        }
+
+        table th {
+            border: 1px solid #000000;          /* 境界線を実線で指定 */
+            text-align: center;                 /* インライン要素の位置を指定 */
+            padding: 0px;                       /* 要素の余白を指定(上下左右) */
+            color: #ffffff;                     /* フォントの色を指定 */
+            font-size: 10px;                     /* フォントのサイズを指定 */
+            background-color: #000000;   
+            height: 16px;
+        }
+        
+        table td {
+            border: 1px solid #000000;          /* 境界線を実線で指定 */
+            text-align: left;                 /* インライン要素の位置を指定 */
+            vertical-align: middle;
+            padding: 0px;                       /* 要素の余白を指定(上下左右) */
+            color: #808080;                     /* フォントの色を指定 */
+            font-size: 10px;                     /* フォントのサイズを指定 */
+            height: 16px;
+        }
+        
+        table.EstOrderList tr:hover {
+            background-color: #CCFFFF;    /* マウスオーバー時の行の背景色 */
+        }
+        table.EstOrderRegList tbody:hover {
+            background-color: #CCFFFF;    /* マウスオーバー時の行の背景色 */
+        }
+
+        input:focus, select:focus, textarea:focus {
+            background-color: #bde9ba;
+        }
+
+    </style>
+
+</head>
+<body>
+    
+    <div class="middle">
+        <div class="logo">
+            <div class="clearfix"></div>
+            <asp:Image ID="LogoImg" runat="server" ImageUrl="~/Images/Grayscale_logo_m.png"></asp:Image>
+            <asp:Image ID="Image1" runat="server" ImageUrl="~/Images/titleR_logo.png"></asp:Image>
+            <!--<h6><asp:LoginName ID="LoginName1" runat="server" Font-Bold="true" /></h6>-->
+            <!--<h6><asp:Label ID="lblSessionID" runat="server" Text=""></asp:Label></h6>-->
+        </div>
+    </div>
+      
+    <div>
+        <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server"></asp:ContentPlaceHolder>
+    </div>
+
+</body>
+</html>
