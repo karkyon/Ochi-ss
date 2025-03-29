@@ -1,4 +1,4 @@
-﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Ochi-ss.Edit.master.cs" Inherits="Ochi_ss.Ochi_ss_Edit" %>
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Ochi-ss.Edit.Master.cs" Inherits="Ochi_ss.Ochi_ss_Edit" %>
 
 <!DOCTYPE html>
 

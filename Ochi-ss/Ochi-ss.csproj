@@ -288,7 +288,6 @@
     <Content Include="Scripts\esm\popper-utils.js.map" />
     <Content Include="MasterPages\Ochi-ss.Master" />
     <Content Include="EstOrder.aspx" />
-    <Content Include="MasterPages\Ochi-ss.Edit.Master" />
     <Content Include="MasterPages\Ochi-ss.Master.Master" />
     <Content Include="Content\bootstrap.rtl.min.css.map" />
     <Content Include="Content\bootstrap.rtl.css.map" />
@@ -310,7 +309,7 @@
     <Content Include="MasterPages\Ochi-ss.List.Master" />
     <Content Include="MasterPages\Ochi-ss.3DImage.Master" />
     <Content Include="MasterPages\Ochi-ss.Main.Master" />
-    <Content Include="MasterPages\Ochi-ss.Edit - コピー.Master" />
+    <Content Include="MasterPages\Ochi-ss.Edit.Master" />
     <None Include="Properties\PublishProfiles\Ochi-ss%40Azure.pubxml" />
     <Content Include="Scripts\bootstrap.min.js.map" />
     <Content Include="Scripts\bootstrap.js.map" />
@@ -450,12 +449,12 @@
     <Compile Include="MainForm.aspx.designer.cs">
       <DependentUpon>MainForm.aspx</DependentUpon>
     </Compile>
-    <Compile Include="MasterPages\Ochi-ss.Edit - コピー.Master.cs">
-      <DependentUpon>Ochi-ss.Edit - コピー.Master</DependentUpon>
+    <Compile Include="MasterPages\Ochi-ss.Edit.Master.cs">
+      <DependentUpon>Ochi-ss.Edit.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="MasterPages\Ochi-ss.Edit - コピー.Master.designer.cs">
-      <DependentUpon>Ochi-ss.Edit - コピー.Master</DependentUpon>
+    <Compile Include="MasterPages\Ochi-ss.Edit.Master.designer.cs">
+      <DependentUpon>Ochi-ss.Edit.Master</DependentUpon>
     </Compile>
     <Compile Include="MasterPages\Ochi-ss.Main.Master.cs">
       <DependentUpon>Ochi-ss.Main.Master</DependentUpon>
@@ -491,13 +490,6 @@
     </Compile>
     <Compile Include="MasterPages\Ochi-ss.Master.Master.designer.cs">
       <DependentUpon>Ochi-ss.Master.Master</DependentUpon>
-    </Compile>
-    <Compile Include="MasterPages\Ochi-ss.Edit.Master.cs">
-      <DependentUpon>Ochi-ss.Edit.Master</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="MasterPages\Ochi-ss.Edit.Master.designer.cs">
-      <DependentUpon>Ochi-ss.Edit.Master</DependentUpon>
     </Compile>
     <Compile Include="MasterPages\Ochi-ss.Master.cs">
       <DependentUpon>Ochi-ss.Master</DependentUpon>
